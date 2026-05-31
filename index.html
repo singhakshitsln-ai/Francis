@@ -2,59 +2,173 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Francis - Ultimate Pong Game with Real Physics, AI Opponent, and Mobile Support">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Francis Pong">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23667eea' width='192' height='192'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='Arial'>F</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23667eea' width='180' height='180'/><text x='50%' y='50%' font-size='90' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='Arial'>F</text></svg>">
     <title>Francis - Pong Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <div class="app-container">
+        <!-- Header -->
         <div class="header">
-            <h1>🎮 Francis - Pong Game 🎮</h1>
-            <p class="subtitle">Classic Pong with AI Opponent</p>
+            <h1>🎮 FRANCIS</h1>
+            <p class="subtitle">Ultimate Pong Experience</p>
         </div>
 
-        <div class="game-info">
-            <div class="score-container">
-                <div class="player-score">
-                    <h2>Player</h2>
-                    <p id="playerScore">0</p>
-                </div>
-                <div class="vs">VS</div>
-                <div class="ai-score">
-                    <h2>Francis (AI)</h2>
-                    <p id="aiScore">0</p>
+        <!-- Score Board -->
+        <div class="scoreboard">
+            <div class="player-info">
+                <div class="player-name">YOU</div>
+                <div class="score" id="playerScore">0</div>
+            </div>
+            <div class="vs-text">VS</div>
+            <div class="ai-info">
+                <div class="ai-name">FRANCIS</div>
+                <div class="score" id="aiScore">0</div>
+            </div>
+        </div>
+
+        <!-- Game Canvas -->
+        <div class="canvas-container">
+            <canvas id="gameCanvas"></canvas>
+            <div class="game-overlay" id="gameOverlay">
+                <div class="overlay-content">
+                    <h2 id="overlayTitle">Ready to Play?</h2>
+                    <button id="startPlayBtn" class="large-btn">▶️ START GAME</button>
+                    <div class="touch-controls-hint" id="touchHint">
+                        <p>📱 Tap bottom or use touch controls</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <!-- Mobile Touch Controls -->
+        <div class="mobile-controls" id="mobileControls">
+            <button class="touch-btn up-btn" id="upBtn">⬆️</button>
+            <button class="touch-btn down-btn" id="downBtn">⬇️</button>
+            <div class="pause-area" id="pauseArea">TAP TO PAUSE</div>
+        </div>
 
-        <div class="controls">
-            <div class="control-section">
-                <h3>🎮 Controls</h3>
-                <p><strong>Move Paddle:</strong> ⬆️ UP Arrow / ⬇️ DOWN Arrow</p>
-                <p><strong>Alternative:</strong> 🖱️ Mouse Y-Position</p>
-                <p><strong>Start/Pause:</strong> SPACEBAR</p>
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <div class="stat-item">
+                <span class="stat-label">Ball Speed:</span>
+                <span class="stat-value" id="ballSpeed">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Rally:</span>
+                <span class="stat-value" id="rallyCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Game Time:</span>
+                <span class="stat-value" id="gameTime">0:00</span>
             </div>
         </div>
 
-        <div class="game-status">
-            <p id="statusText">Press SPACEBAR to Start</p>
-            <button id="restartBtn" class="restart-btn">🔄 Restart Game</button>
+        <!-- Controls Info -->
+        <div class="controls-info">
+            <div class="info-section">
+                <h3>🎮 How to Play</h3>
+                <div id="controlsDisplay">
+                    <p><strong>Desktop:</strong> ⬆️⬇️ Arrow Keys or W/S</p>
+                    <p><strong>Mobile:</strong> 👆 Touch Buttons or Drag</p>
+                    <p><strong>Pause:</strong> Tap Center or Press P</p>
+                </div>
+            </div>
         </div>
 
-        <div class="features">
-            <h3>✨ Features</h3>
-            <ul>
-                <li>🎯 Smooth paddle collision detection</li>
-                <li>🧠 Intelligent AI opponent</li>
-                <li>⚡ Ball physics with spin</li>
-                <li>🎨 Beautiful gradient graphics</li>
-                <li>📊 Real-time scoreboard</li>
-            </ul>
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button id="restartBtn" class="btn btn-secondary">🔄 NEW GAME</button>
+            <button id="settingsBtn" class="btn btn-secondary">⚙️ SETTINGS</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Settings</h2>
+                <button class="close-btn" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label for="difficultySlider">AI Difficulty:</label>
+                    <div class="slider-container">
+                        <input type="range" id="difficultySlider" min="0.3" max="1" step="0.1" value="0.7">
+                        <span class="difficulty-label" id="difficultyLabel">Medium</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label for="soundToggle">🔊 Sound Effects:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="soundToggle" checked>
+                        <span class="slider-switch"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label for="ballSpeedSlider">Ball Physics:</label>
+                    <div class="slider-container">
+                        <input type="range" id="ballSpeedSlider" min="0.8" max="1.5" step="0.1" value="1">
+                        <span class="speed-label" id="speedLabel">Normal</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <p class="info-text">📲 Offline compatible - plays anywhere!</p>
+                    <p class="info-text">💾 Your settings are saved automatically</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+        <h3>✨ Features</h3>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">🎯</span>
+                <span class="feature-text">Real Physics</span>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🧠</span>
+                <span class="feature-text">Smart AI</span>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📱</span>
+                <span class="feature-text">Mobile Ready</span>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🌐</span>
+                <span class="feature-text">Offline Play</span>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <span class="feature-text">Responsive</span>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">💾</span>
+                <span class="feature-text">PWA Support</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Install Prompt for PWA -->
+    <div class="install-prompt" id="installPrompt">
+        <div class="install-content">
+            <span id="installClose" class="install-close">&times;</span>
+            <p>📲 Add Francis to your home screen!</p>
+            <button id="installBtn" class="btn btn-primary">Install App</button>
         </div>
     </div>
 
     <script src="game.js"></script>
+    <script src="service-worker-register.js"></script>
 </body>
 </html>
