@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francis - Pong Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Francis - Pong Game 🎮</h1>
+            <p class="subtitle">Classic Pong with AI Opponent</p>
+        </div>
+
+        <div class="game-info">
+            <div class="score-container">
+                <div class="player-score">
+                    <h2>Player</h2>
+                    <p id="playerScore">0</p>
+                </div>
+                <div class="vs">VS</div>
+                <div class="ai-score">
+                    <h2>Francis (AI)</h2>
+                    <p id="aiScore">0</p>
+                </div>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+        <div class="controls">
+            <div class="control-section">
+                <h3>🎮 Controls</h3>
+                <p><strong>Move Paddle:</strong> ⬆️ UP Arrow / ⬇️ DOWN Arrow</p>
+                <p><strong>Alternative:</strong> 🖱️ Mouse Y-Position</p>
+                <p><strong>Start/Pause:</strong> SPACEBAR</p>
+            </div>
+        </div>
+
+        <div class="game-status">
+            <p id="statusText">Press SPACEBAR to Start</p>
+            <button id="restartBtn" class="restart-btn">🔄 Restart Game</button>
+        </div>
+
+        <div class="features">
+            <h3>✨ Features</h3>
+            <ul>
+                <li>🎯 Smooth paddle collision detection</li>
+                <li>🧠 Intelligent AI opponent</li>
+                <li>⚡ Ball physics with spin</li>
+                <li>🎨 Beautiful gradient graphics</li>
+                <li>📊 Real-time scoreboard</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
